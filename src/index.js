@@ -1,1 +1,1 @@
-alert("Welcome to my AI Recipe Generator");
+alert("Welcome to my AI Workout Generator");
