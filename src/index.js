@@ -1,15 +1,46 @@
+function displayWorkout(response) {
+  console.log("workout plan generated:");
+
+  new Typewriter("#workout-output", {
+    strings: response.data.answer,
+    autoStart: true,
+    delay: 1,
+    cursor: "|",
+  });
+}
+
 function generateWorkout(event) {
   event.preventDefault();
 
-let workoutelement=document.querySelector("#workout-output");
+  let instructionsInput = document.querySelector("#user-instructions");
+  let apiKey = "tf6b10721ee3fc0cdao3e7c56700ab34";
 
+  let prompt = instructionsInput.value;
 
-new Typewriter("#workout-output", {
-  strings: "`To do a burpee, start standing, squat down, place hands on the floor, kick feet back to a plank, do a push-up (optional), jump feet forward, then jump up explosively, landing softly to repeat. Focus on keeping your core tight, back straight, and engaging your whole body for this full-body cardio and strength move, with variations available for all fitness levels.",
-  autoStart: true,
-  deplay: 50,
-  cursor: "|",
-});
+  let context = `
+You are a certified fitness coach and movement instructor.
+
+When a user asks "how do I do" an exercise:
+- Explain ONLY that exercise
+- Give a clear step-by-step breakdown
+- Include proper form cues
+- Mention breathing technique
+- Share common mistakes
+- Provide beginner and advanced variations if relevant
+
+Your goal is to TEACH the movement, not to design a workout program.
+Respond confidently and helpfully.
+Format the response in clean HTML with headings and bullet points.
+`;
+
+  let apiUrl = `https://api.shecodes.io/ai/v1/generate?prompt=${prompt}&context=${context}&key=${apiKey}`;
+
+  console.log("generating workout plan...");
+  console.log("prompt:", prompt);
+  console.log("context:", context);
+
+  axios.get(apiUrl).then(displayWorkout);
 }
+
 let workoutFormElement = document.querySelector("#workout-generator-form");
 workoutFormElement.addEventListener("submit", generateWorkout);
